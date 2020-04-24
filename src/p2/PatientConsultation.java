@@ -48,8 +48,9 @@ public class PatientConsultation extends PatientDetails implements PatientManage
 	
 	@Override
 	public void AppoitmentDetails() {
-		Date date;
-	}
+		Date date=new Date();
+		System.out.println("Current date and time - "+date);
+		}
 
 	Scanner s1=new Scanner(System.in);	
 	String doctorName=s1.next();
@@ -71,12 +72,9 @@ public class PatientConsultation extends PatientDetails implements PatientManage
 			break;
 		case "varun":	
 			available="No";			
-			System.out.println("The doctor is not  available");
-			break;
-			
+			break;			
 		case "sathish":	
 			available="No";			
-			System.out.println("The doctor is not available");
 			break;
 			default:
 				break;
@@ -88,12 +86,15 @@ public class PatientConsultation extends PatientDetails implements PatientManage
 	@Override
 	public String LabTestResult() {
 		
-		String LabResult="positive";
+		String LabResult="";
 		if(this.DoctorAvailablity().equals("Yes")) {
-		
-		System.out.println("Get the test results");
+			
+		System.out.println();
+		LabResult="positive";
+		System.out.println("Here is your Test Result...");
 		}else {
-			System.out.println("Doctor not available ...your appointed will be rescheduled");
+			LabResult="negative";
+			System.out.println("Doctor is not available ...your appointment will be rescheduled");
 		}
 		return LabResult;
 		
@@ -114,6 +115,7 @@ public class PatientConsultation extends PatientDetails implements PatientManage
 	
 	@Override
 	public boolean MedicinesPrescribed() {
+		
 		ArrayList<String> ls=new ArrayList<String>();
 		ls.add("DOLO650");
 		ls.add("Crosin");
@@ -125,20 +127,24 @@ public class PatientConsultation extends PatientDetails implements PatientManage
 		String DoctorPrescription=this.DoctorConsultation();
 		ls.contains(DoctorPrescription);
 		
-		if(ls.contains(DoctorPrescription)) {
+		if(this.DoctorAvailablity().equals("No")) {	
+			
+		}else if(ls.contains(DoctorPrescription)) {
 			System.out.println("Medicines are provided");
 		}else {
 			System.out.println("Medicines are not available");
 		}
 		return ls.contains(DoctorPrescription);
 	}
-
+	
 	@Override
 	public void payment() {
-		
-		String TypeOfPatient="Regular";
+		System.out.print("Enter the patient type :");
+		Scanner s4=new Scanner(System.in);
+		String TypeOfPatient=s4.next();
 				
-		if(this.MedicinesPrescribed()==true&&TypeOfPatient.equals("Regular")) {		
+		if(this.MedicinesPrescribed()==true&&TypeOfPatient.equals("Regular")&&
+				this.DoctorAvailablity().equals("Yes")) {					
 		
 		int patientAccountBalance=3450;		
 		int MedicineFee=70;
@@ -147,12 +153,14 @@ public class PatientConsultation extends PatientDetails implements PatientManage
 		 
 	    Amount=patientAccountBalance-(MedicineFee+DoctorFee);
 	    System.out.println("Patients Existing balance- "+patientAccountBalance);		
-		System.out.println("Doctor fee- "+DoctorFee+ "MedicineFee- "+MedicineFee);
+		System.out.println("Doctor fee- "+DoctorFee+ " MedicineFee- "+MedicineFee);
 		System.out.println("Patient Account balance after debit- "+Amount);
 		System.out.println("******Payment has been made sucessfully*****");
 		
-	}else {
+	}else if(TypeOfPatient.equals("New")&& this.DoctorAvailablity().equals("Yes")&&
+			this.MedicinesPrescribed()==true){
 		System.out.println("Amount paid in cash");
 	}
 	}
+
 }
